@@ -10,6 +10,7 @@ import EntypoIcon from 'react-native-vector-icons/Entypo';
 import {HomeScreen} from './src/views/Home';
 import {SettingsScreen} from './src/views/System';
 import {MeHome, HelpScreen, AboutShop, UserTerms} from './src/views/Me';
+import {CityAll} from './src/views/Home/CityAll';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -65,11 +66,19 @@ function App(props) {
           options={{title: null}}
         />
         <Stack.Screen
+          name="AllCity"
+          component={CityAll}
+          options={{title: '全部国家及地区'}}
+          {...props}
+        />
+
+        <Stack.Screen
           name="MeHelp"
           component={HelpScreen}
           options={{title: '帮助和反馈'}}
           {...props}
         />
+
         <Stack.Screen
           name="UserTerms"
           component={UserTerms}
