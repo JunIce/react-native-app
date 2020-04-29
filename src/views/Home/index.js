@@ -6,6 +6,7 @@ import {
   Image,
   StyleSheet,
   TouchableOpacity,
+  ActivityIndicator,
 } from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/AntDesign';
@@ -21,29 +22,41 @@ export class HomeScreen extends React.Component {
     this.state = {
       banners: [],
       cities: [],
+      loading: false,
     };
   }
 
   componentDidMount() {
-    getBannerList().then(res => {
-      this.setState({
-        banners: res.data || [],
-      });
+    this.fetchData();
+    console.log(this.props);
+  }
+
+  fetchData = () => {
+    this.setState({
+      loading: true,
     });
 
-    getHomeCityList().then(res => {
+    Promise.all([getBannerList(), getHomeCityList()]).then(res => {
       this.setState({
-        cities: res.data || [],
+        loading: false,
+        banners: res[0].data || [],
+        cities: res[1].data || [],
       });
     });
-  }
+  };
 
   render() {
     const {banners} = this.state;
 
+    if (this.state.loading) return <ActivityIndicator />;
+
     return (
       <ScrollView style={styles.page}>
         <View style={styles.pageView}>
+          <Button
+            onPress={() => this.props.navigation.navigate('GridView')}
+            title="GridView"
+          />
           <View>
             <Swiper
               style={{height: 100}}
@@ -51,14 +64,22 @@ export class HomeScreen extends React.Component {
               paginationStyle={{bottom: 4}}>
               {banners.map(b => {
                 return (
-                  <View>
-                    <Image
-                      source={{
-                        uri: b.url,
-                      }}
-                      style={styles.bannerImage}
-                    />
-                  </View>
+                  <TouchableOpacity
+                    key={b}
+                    onPress={() =>
+                      this.props.navigation.navigate('CityDetail', {
+                        city: 'Banner',
+                      })
+                    }>
+                    <View>
+                      <Image
+                        source={{
+                          uri: b.url,
+                        }}
+                        style={styles.bannerImage}
+                      />
+                    </View>
+                  </TouchableOpacity>
                 );
               })}
             </Swiper>
@@ -130,7 +151,7 @@ export class HomeScreen extends React.Component {
 
     let newList = chunk(childlist, 3);
     return newList.map((item, idx) => (
-      <Grid style={{marginTop: 10}} key={idx}>
+      <Grid style={{marginBottom: 10}} key={idx}>
         <Row style={{marginLeft: -8, marginRight: -8}}>{item}</Row>
       </Grid>
     ));
@@ -140,7 +161,7 @@ export class HomeScreen extends React.Component {
     return list.map(item => (
       <Col key={item.city}>
         <View style={{paddingLeft: 8, paddingRight: 8}}>
-          <RowItem {...item} />
+          <RowItem {...this.props} {...item} />
         </View>
       </Col>
     ));
@@ -196,51 +217,63 @@ const HorizontalItem = props => {
 const RowItem = props => {
   return (
     <View style={{borderRadius: 4, overflow: 'hidden'}}>
-      <View>
-        <Image
-          source={{
-            uri:
-              'https://hbimg.huabanimg.com/9455f38844901d4bacd5becb1fd1a8f5e95dd8636123-eEk3as_fw658',
-          }}
-          style={{height: 76}}
-        />
-        <View
-          style={{
-            width: '100%',
-            height: 76,
-            backgroundColor: 'rgba(0,0,0,0.5)',
-            position: 'absolute',
-            zIndex: 1,
-          }}
-        />
-        <View
-          style={{width: '100%', height: 76, position: 'absolute', zIndex: 2}}>
+      <TouchableOpacity
+        onPress={() =>
+          props.navigation.navigate('CityDetail', {
+            city: props.name,
+          })
+        }>
+        <View>
+          <Image
+            source={{
+              uri:
+                'https://hbimg.huabanimg.com/9455f38844901d4bacd5becb1fd1a8f5e95dd8636123-eEk3as_fw658',
+            }}
+            style={{height: 76}}
+          />
           <View
             style={{
-              flexDirection: 'row',
-              justifyContent: 'center',
-              alignItems: 'center',
+              width: '100%',
               height: 76,
+              backgroundColor: 'rgba(0,0,0,0.5)',
+              position: 'absolute',
+              zIndex: 1,
+            }}
+          />
+          <View
+            style={{
+              width: '100%',
+              height: 76,
+              position: 'absolute',
+              zIndex: 2,
             }}>
-            <Text style={{color: '#fff', fontSize: 18, fontWeight: 'bold'}}>
-              {props.name}
-            </Text>
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'center',
+                alignItems: 'center',
+                height: 76,
+              }}>
+              <Text style={{color: '#fff', fontSize: 18, fontWeight: 'bold'}}>
+                {props.name}
+              </Text>
+            </View>
           </View>
         </View>
-      </View>
-      <View
-        style={{
-          padding: 8,
-          borderLeftWidth: 0.5,
-          borderRightWidth: 0.5,
-          borderBottomWidth: 0.5,
-          borderColor: '#ccc',
-          flex: 1,
-          justifyContent: 'center',
-          flexDirection: 'row',
-        }}>
-        <Text style={{color: 'orange', fontSize: 12}}> {props.price}</Text>
-      </View>
+        <View
+          style={{
+            padding: 8,
+            borderLeftWidth: 0.5,
+            borderRightWidth: 0.5,
+            borderBottomWidth: 0.5,
+            borderColor: '#ccc',
+            flex: 1,
+            justifyContent: 'center',
+            flexDirection: 'row',
+          }}>
+          <Text style={{color: 'orange', fontSize: 12}}> {props.price}</Text>
+        </View>
+      </TouchableOpacity>
     </View>
   );
 };

@@ -46,8 +46,8 @@ export const MeHome = ({navigation}) => {
   return (
     <SafeAreaView style={styles.pageStyle}>
       <ScrollView>
-        {NavList.map(item => (
-          <TouchableOpacityView onPress={item.navigateUrl}>
+        {NavList.map((item, index) => (
+          <TouchableOpacityView onPress={item.navigateUrl} key={index}>
             <View style={styles.listContainer}>
               <View style={styles.listItem}>
                 <View>

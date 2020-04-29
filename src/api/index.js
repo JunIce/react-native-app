@@ -23,3 +23,4 @@ const getAction = (url, params = {}) => {
 
 export const getBannerList = () => getAction('/banner');
 export const getHomeCityList = () => getAction('/home/city');
+export const getCityDetail = () => getAction('/city/detail');

@@ -11,11 +11,13 @@ import {HomeScreen} from './src/views/Home';
 import {SettingsScreen} from './src/views/System';
 import {MeHome, HelpScreen, AboutShop, UserTerms} from './src/views/Me';
 import {CityAll} from './src/views/Home/CityAll';
+import {CityDetail} from './src/views/CityDetail';
+import {GridView} from './src/views/GridView';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
 
-function PageScreen() {
+function PageScreen(props) {
   return (
     <Tab.Navigator
       screenOptions={({route}) => ({
@@ -23,6 +25,7 @@ function PageScreen() {
           let ccolor = focused ? 'tomato' : 'gray';
 
           if (route.name === 'Shop') {
+            console.log(props);
             return <EntypoIcon name="shopping-bag" color={ccolor} />;
           }
 
@@ -42,9 +45,7 @@ function PageScreen() {
       <Tab.Screen
         name="Shop"
         component={HomeScreen}
-        options={{
-          title: '首页',
-        }}
+        options={{title: '商店'}}
       />
       <Tab.Screen
         name="Order"
@@ -60,18 +61,14 @@ function App(props) {
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Home">
-        <Stack.Screen
-          name="Home"
-          component={PageScreen}
-          options={{title: null}}
-        />
+        <Stack.Screen name="Home" component={PageScreen} {...props} />
         <Stack.Screen
           name="AllCity"
           component={CityAll}
           options={{title: '全部国家及地区'}}
           {...props}
         />
-
+        <Stack.Screen name="CityDetail" component={CityDetail} />
         <Stack.Screen
           name="MeHelp"
           component={HelpScreen}
@@ -91,6 +88,7 @@ function App(props) {
           options={{title: '关于流量商店'}}
           {...props}
         />
+        <Stack.Screen name="GridView" component={GridView} />
       </Stack.Navigator>
     </NavigationContainer>
   );
