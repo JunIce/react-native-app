@@ -2,11 +2,11 @@ import * as React from 'react';
 import {
   View,
   Text,
-  Button,
   Image,
   StyleSheet,
   TouchableOpacity,
   ActivityIndicator,
+  RefreshControl,
 } from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/AntDesign';
@@ -16,6 +16,12 @@ import {getBannerList, getHomeCityList} from '../../api';
 import {chunk} from '../../util';
 
 export class HomeScreen extends React.Component {
+  static navigationOptions = ({navigation}) => {
+    return {
+      headerTitle: 'Homesss',
+    };
+  };
+
   constructor(props) {
     super(props);
 
@@ -23,6 +29,7 @@ export class HomeScreen extends React.Component {
       banners: [],
       cities: [],
       loading: false,
+      refreshing: false,
     };
   }
 
@@ -45,18 +52,31 @@ export class HomeScreen extends React.Component {
     });
   };
 
+  _onRefresh = () => {
+    this.setState({
+      refreshing: true,
+    });
+
+    setTimeout(() => {
+      this.setState({refreshing: false});
+    }, 3000);
+  };
+
   render() {
     const {banners} = this.state;
 
     if (this.state.loading) return <ActivityIndicator />;
 
     return (
-      <ScrollView style={styles.page}>
-        <View style={styles.pageView}>
-          <Button
-            onPress={() => this.props.navigation.navigate('GridView')}
-            title="GridView"
+      <ScrollView
+        style={styles.page}
+        refreshControl={
+          <RefreshControl
+            refreshing={this.state.refreshing}
+            onRefresh={this._onRefresh}
           />
+        }>
+        <View style={styles.pageView}>
           <View>
             <Swiper
               style={{height: 100}}

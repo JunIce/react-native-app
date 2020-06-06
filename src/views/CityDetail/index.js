@@ -19,7 +19,10 @@ export class CityDetail extends React.Component {
 
   componentDidMount() {
     const {city} = this.props.route.params;
-    this.props.navigation.setOptions({title: city || '城市详情'});
+    this.props.navigation.setOptions({
+      headerBackTitleVisible: false,
+      title: city || '城市详情',
+    });
     this.getDetail();
   }
 
