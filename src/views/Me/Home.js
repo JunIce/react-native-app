@@ -1,8 +1,15 @@
 import * as React from 'react';
-import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  Clipboard,
+} from 'react-native';
 import SafeAreaView from 'react-native-safe-area-view';
 import {ScrollView} from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/AntDesign';
+import Toast from 'react-native-root-toast';
 
 export const MeHome = ({navigation}) => {
   const NavList = [
@@ -15,8 +22,15 @@ export const MeHome = ({navigation}) => {
     {
       title: '设备编号',
       textRight: null,
-      icon: <Icon name="right" size={14} color="#cccccc" />,
-      navigateUrl: '',
+      text: 'FDJD23456762837832DJK87D',
+      icon: <Text style={{color: 'blue', fontSize: 12}}>点击可复制</Text>,
+      navigateUrl: () => {
+        Clipboard.setString('FDJD23456762837832DJK87D');
+        Toast.show('复制成功', {
+          position: Toast.positions.BOTTOM,
+          shadow: false,
+        });
+      },
     },
     {
       title: '常见问题',
@@ -50,9 +64,15 @@ export const MeHome = ({navigation}) => {
           <TouchableOpacityView onPress={item.navigateUrl} key={index}>
             <View style={styles.listContainer}>
               <View style={styles.listItem}>
-                <View>
+                <View style={{flexDirection: 'row'}}>
                   <Text>{item.title}</Text>
+                  {item.text ? (
+                    <Text style={{color: '#999', fontSize: 12, marginLeft: 10}}>
+                      {item.text}
+                    </Text>
+                  ) : null}
                 </View>
+
                 <View>
                   {item.textRight && (
                     <Text style={styles.textRight}>{item.textRight}</Text>
@@ -73,7 +93,7 @@ function TouchableOpacityView(props) {
     return props.children;
   }
   return (
-    <TouchableOpacity onPress={() => props.onPress()}>
+    <TouchableOpacity onPress={() => props.onPress()} activeOpacity={0.8}>
       {props.children}
     </TouchableOpacity>
   );

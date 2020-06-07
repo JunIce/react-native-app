@@ -1,7 +1,12 @@
-import * as React from 'react';
+import React, {useLayoutEffect} from 'react';
 import {View, Text, ScrollView, StyleSheet} from 'react-native';
 
-export const UserTerms = () => {
+export const UserTerms = ({navigation}) => {
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerBackTitleVisible: false,
+    });
+  }, [navigation]);
   return (
     <ScrollView style={styles.page}>
       <View>

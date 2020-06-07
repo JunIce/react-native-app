@@ -1,7 +1,12 @@
-import * as React from 'react';
+import React, {useLayoutEffect} from 'react';
 import {View, Text, Image, StyleSheet} from 'react-native';
 
-export const AboutShop = () => {
+export const AboutShop = ({navigation}) => {
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerBackTitleVisible: false,
+    });
+  }, [navigation]);
   return (
     <View style={styles.page}>
       <View>

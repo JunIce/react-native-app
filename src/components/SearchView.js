@@ -1,16 +1,27 @@
 import React from 'react';
-import {View, StyleSheet, Text, Dimensions} from 'react-native';
+import {
+  View,
+  StyleSheet,
+  Text,
+  Dimensions,
+  TouchableWithoutFeedback,
+} from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
 
 const WINDOW_WIDTH = Dimensions.get('window').width;
 
-export default function SearchView() {
+export default function SearchView({navigation}) {
   return (
     <View style={styles.container}>
-      <View style={styles.box}>
-        <Icon name="search" color="#666" size={16} />
-        <Text style={styles.text}>搜索国家或地区1</Text>
-      </View>
+      <TouchableWithoutFeedback
+        onPress={() => {
+          navigation.navigate('AllCity', {tab: 'ALL'});
+        }}>
+        <View style={styles.box}>
+          <Icon name="search" color="#666" size={16} />
+          <Text style={styles.text}>搜索国家或地区1</Text>
+        </View>
+      </TouchableWithoutFeedback>
     </View>
   );
 }

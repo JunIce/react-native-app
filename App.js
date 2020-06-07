@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import * as React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
@@ -26,7 +27,7 @@ function PageScreen({navigation, route}) {
 
     switch (routeName) {
       case 'Shop':
-        return () => <SearchView />;
+        return () => <SearchView navigation={navigation} />;
       case 'Order':
         return '订单';
       case 'MeHome':

@@ -16,12 +16,6 @@ import {getBannerList, getHomeCityList} from '../../api';
 import {chunk} from '../../util';
 
 export class HomeScreen extends React.Component {
-  static navigationOptions = ({navigation}) => {
-    return {
-      headerTitle: 'Homesss',
-    };
-  };
-
   constructor(props) {
     super(props);
 
@@ -65,7 +59,9 @@ export class HomeScreen extends React.Component {
   render() {
     const {banners} = this.state;
 
-    if (this.state.loading) return <ActivityIndicator />;
+    if (this.state.loading) {
+      return <ActivityIndicator />;
+    }
 
     return (
       <ScrollView
@@ -123,7 +119,9 @@ export class HomeScreen extends React.Component {
               rightBtn={
                 <Text
                   style={styles.subtitleNext}
-                  onPress={() => this.props.navigation.navigate('AllCity')}>
+                  onPress={() =>
+                    this.props.navigation.navigate('AllCity', {tab: 'ALL'})
+                  }>
                   查看全部
                 </Text>
               }
@@ -139,7 +137,9 @@ export class HomeScreen extends React.Component {
               rightBtn={
                 <Text
                   style={styles.subtitleNext}
-                  onPress={() => this.props.navigation.navigate('AllCity')}>
+                  onPress={() =>
+                    this.props.navigation.navigate('AllCity', {tab: 'SECTION'})
+                  }>
                   查看全部
                 </Text>
               }
@@ -218,7 +218,7 @@ const HorizontalItem = props => {
     <View
       style={{
         flex: 1,
-        width: 200,
+        width: 160,
         height: 100,
         paddingLeft: 8,
         paddingRight: 8,
