@@ -1,12 +1,10 @@
 import * as React from 'react';
-import {
-  Text,
-  Image,
-  View,
-  StyleSheet,
-  FlatList,
-  TouchableHighlight,
-} from 'react-native';
+import {Text, Image, View, StyleSheet, FlatList} from 'react-native';
+import {ScrollView} from 'react-native-gesture-handler';
+
+import {FlowListItem} from '../../components/FlowListItem';
+import {PageLoading} from '../../components/PageLoading';
+
 import {getCityDetail} from '../../api';
 
 export class CityDetail extends React.Component {
@@ -14,48 +12,37 @@ export class CityDetail extends React.Component {
     super(props);
     this.state = {
       list: [],
+      loading: true,
     };
   }
 
   componentDidMount() {
-    const {city} = this.props.route.params;
+    const params = this.props.route.params;
     this.props.navigation.setOptions({
       headerBackTitleVisible: false,
-      title: city || '城市详情',
+      title: params ? params.city : '城市详情',
     });
     this.getDetail();
   }
 
   getDetail = () => {
+    this.setState({
+      loading: true,
+    });
     getCityDetail().then(res => {
       this.setState({
         list: res.data.list,
+        loading: false,
       });
     });
   };
 
-  renderCard = () => {
-    return this.state.list.map(card => (
-      <View style={styles.card} key={card.id}>
-        <View>
-          <Text style={styles.card_title}>{card.title}</Text>
-          <Text style={styles.card_sub_title}>{card.sub_title}</Text>
-        </View>
-        <View style={styles.under_box}>
-          <View style={{flexDirection: 'row'}}>
-            <Text style={styles.card_current_price}>{card.current}</Text>
-            <Text style={styles.card_old_price}>{card.old}</Text>
-          </View>
-          <TouchableHighlight>
-            <Text style={styles.sale_button}>购买</Text>
-          </TouchableHighlight>
-        </View>
-      </View>
-    ));
-  };
   render() {
+    if (this.state.loading) {
+      return <PageLoading />;
+    }
     return (
-      <View style={styles.page}>
+      <ScrollView style={styles.page}>
         <View>
           <Image
             style={styles.backgroundImage}
@@ -70,10 +57,16 @@ export class CityDetail extends React.Component {
             <View>
               <Text>流量包套餐</Text>
             </View>
-            <View style={{marginTop: 10}}>{this.renderCard()}</View>
+            <View style={{marginTop: 10}}>
+              <FlatList
+                data={this.state.list}
+                renderItem={props => <FlowListItem {...props} />}
+                ItemSeparatorComponent={() => <View style={{height: 10}} />}
+              />
+            </View>
           </View>
         </View>
-      </View>
+      </ScrollView>
     );
   }
 }
@@ -93,48 +86,5 @@ const styles = StyleSheet.create({
   },
   pagepadding: {
     padding: 20,
-  },
-  card: {
-    borderWidth: 0.5,
-    borderColor: '#cccc',
-    borderRadius: 8,
-    padding: 10,
-    marginBottom: 10,
-  },
-  card_title: {
-    color: '#333',
-  },
-  card_sub_title: {
-    color: '#999',
-    fontSize: 12,
-    marginTop: 10,
-  },
-  card_current_price: {
-    color: 'red',
-    fontSize: 12,
-  },
-  card_old_price: {
-    color: '#ccc',
-    textDecorationLine: 'line-through',
-    fontSize: 12,
-    marginLeft: 10,
-  },
-  sale_button: {
-    display: 'flex',
-    borderWidth: 0.5,
-    borderColor: 'blue',
-    paddingTop: 8,
-    paddingBottom: 8,
-    paddingLeft: 10,
-    paddingRight: 10,
-    borderRadius: 14,
-    fontSize: 12,
-    color: 'blue',
-  },
-  under_box: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginTop: 10,
   },
 });

@@ -83,9 +83,7 @@ export class HomeScreen extends React.Component {
                   <TouchableOpacity
                     key={b}
                     onPress={() =>
-                      this.props.navigation.navigate('CityDetail', {
-                        city: 'Banner',
-                      })
+                      this.props.navigation.navigate('CityDetail')
                     }>
                     <View>
                       <Image
@@ -202,7 +200,7 @@ const RenderTitle = props => {
                   style={styles.subtitleNextIcon}
                   name="right"
                   size={10}
-                  color="#ccc"
+                  color="#999"
                 />
               )}
             </View>
@@ -323,8 +321,8 @@ const styles = StyleSheet.create({
     paddingBottom: 20,
   },
   subtitle: {
-    fontSize: 18,
-    color: '#666',
+    fontSize: 16,
+    color: '#333',
   },
   subtitleNextContainer: {
     flexDirection: 'row',
@@ -332,7 +330,7 @@ const styles = StyleSheet.create({
   },
   subtitleNext: {
     fontSize: 14,
-    color: '#ccc',
+    color: '#999',
   },
   subtitleNextIcon: {
     marginLeft: 8,

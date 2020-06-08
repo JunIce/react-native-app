@@ -1,12 +1,5 @@
 import React, {PureComponent} from 'react';
-import {
-  View,
-  StyleSheet,
-  FlatList,
-  Dimensions,
-  TouchableOpacity,
-  Image,
-} from 'react-native';
+import {View, StyleSheet, FlatList, Dimensions, Image} from 'react-native';
 import * as Color from '../../constants/colors';
 
 const screenW = Dimensions.get('window').width;

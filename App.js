@@ -6,6 +6,7 @@ import {createStackNavigator} from '@react-navigation/stack';
 
 import UserIcon from 'react-native-vector-icons/FontAwesome';
 import EntypoIcon from 'react-native-vector-icons/Entypo';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import {HomeScreen} from './src/views/Home';
 import {SettingsScreen} from './src/views/System';
@@ -15,6 +16,8 @@ import {CityDetail} from './src/views/CityDetail';
 import {GridView} from './src/views/GridView';
 import {ImagePreview} from './src/views/ImagePreview';
 import SearchView from './src/components/SearchView';
+import {TouchableOpacity} from 'react-native-gesture-handler';
+import {OrderHistory} from './src/views/System/OrderHistory';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -35,9 +38,34 @@ function PageScreen({navigation, route}) {
     }
   }
 
+  function getHeaderRight(r) {
+    const routeName = r.state
+      ? r.state.routes[r.state.index].name
+      : r.params?.screen || 'Shop';
+
+    switch (routeName) {
+      case 'Order':
+        return () => (
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate('OrderHistory');
+            }}>
+            <MaterialCommunityIcons
+              name="history"
+              size={22}
+              style={{padding: 10}}
+            />
+          </TouchableOpacity>
+        );
+      default:
+        return null;
+    }
+  }
+
   React.useLayoutEffect(() => {
     navigation.setOptions({
       headerTitle: getHeaderTitle(route),
+      headerRight: getHeaderRight(route),
     });
   }, [navigation, route]);
 
@@ -113,6 +141,11 @@ function App(props) {
         />
         <Stack.Screen name="GridView" component={GridView} />
         <Stack.Screen name="ImagePreview" component={ImagePreview} />
+        <Stack.Screen
+          name="OrderHistory"
+          component={OrderHistory}
+          options={{title: '历史订单'}}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );
